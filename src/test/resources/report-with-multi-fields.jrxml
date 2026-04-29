@@ -1,0 +1,18 @@
+<!-- Created with Jaspersoft Studio version 7.0.6.final using JasperReports Library version 7.0.6-5d2a603fdc6b3db8f842a83383e594f41891534d  -->
+<jasperReport name="report-with-multi-fields" language="java" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b1c2d3e4-f5a6-7890-abcd-ef1234567890">
+	<title height="50">
+		<element kind="textField" uuid="a1b2c3d4-e5f6-7890-abcd-ef1234567890" x="0" y="0" width="555" height="50">
+			<expression><![CDATA[$F{userName}]]></expression>
+		</element>
+	</title>
+	<detail>
+		<band height="55">
+			<element kind="textField" uuid="dcae806f-bd5f-4fdb-9ca1-d62653b5d91d" x="0" y="0" width="279" height="50">
+				<expression><![CDATA[$F{userEmail}]]></expression>
+			</element>
+			<element kind="textField" uuid="940a2d51-db7a-4a7c-8b86-d852cebd6047" x="280" y="0" width="279" height="50">
+				<expression><![CDATA[$F{randomText}]]></expression>
+			</element>
+		</band>
+	</detail>
+</jasperReport>

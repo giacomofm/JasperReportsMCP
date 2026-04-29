@@ -1,0 +1,7 @@
+<jasperReport name="invalid-report" language="java" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20"
+              rightMargin="20" topMargin="20" bottomMargin="20" uuid="dff21856-6a94-4b69-9580-231addcc482a">
+    <title height="50">
+    <element kind="textField" uuid="7047bc35-c036-4c65-9b1e-3630d352bd82" x="0" y="0" width="555" height="50">
+        <expression><![CDATA[$F{nonExistentField}]]></expression>
+    </element>
+</jasperReport>

@@ -1,0 +1,9 @@
+<jasperReport name="report-with-fields" language="java" pageWidth="595" pageHeight="842" columnWidth="555"
+              leftMargin="20"
+              rightMargin="20" topMargin="20" bottomMargin="20" uuid="b1c2d3e4-f5a6-7890-abcd-ef1234567890">
+    <title height="50">
+        <element kind="textField" uuid="a1b2c3d4-e5f6-7890-abcd-ef1234567890" x="0" y="0" width="555" height="50">
+            <expression><![CDATA[$F{userName}]]></expression>
+        </element>
+    </title>
+</jasperReport>

@@ -1,0 +1,8 @@
+<jasperReport name="valid-report" language="java" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20"
+              rightMargin="20" topMargin="20" bottomMargin="20" uuid="a9a00031-2b86-47c6-bb2b-cecedb4a9778">
+    <title height="50">
+        <element kind="staticText" uuid="68e85bb5-6b88-425d-b3dc-598835c7e498" x="0" y="0" width="555" height="50">
+            <text><![CDATA[Hello JasperReports]]></text>
+        </element>
+    </title>
+</jasperReport>
