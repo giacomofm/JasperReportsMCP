@@ -17,6 +17,8 @@ import java.util.function.BiFunction;
 
 class ValidateJrxmlFileTool extends CustomMcpTool {
 
+	private static final Object JASPER_REPORTS_VALIDATION_LOCK = new Object();
+
 	@Override
 	protected String name() {
 		return "validate-jrxml-file";
@@ -88,19 +90,21 @@ class ValidateJrxmlFileTool extends CustomMcpTool {
 		}
 
 		try {
-			var path = Path.of(strPath);
-			var jasperDesign = JRXmlLoader.load(path.toFile());
+			synchronized (JASPER_REPORTS_VALIDATION_LOCK) {
+				var path = Path.of(strPath);
+				var jasperDesign = JRXmlLoader.load(path.toFile());
 
-			injectFields(jasperDesign, fieldNames);
+				injectFields(jasperDesign, fieldNames);
 
-			var designErrors = JasperCompileManager.verifyDesign(jasperDesign);
-			if (!designErrors.isEmpty()) {
-				var builder = McpSchema.CallToolResult.builder().isError(true);
-				designErrors.stream().map(JRValidationFault::getMessage).forEach(builder::addTextContent);
-				return builder.build();
+				var designErrors = JasperCompileManager.verifyDesign(jasperDesign);
+				if (!designErrors.isEmpty()) {
+					var builder = McpSchema.CallToolResult.builder().isError(true);
+					designErrors.stream().map(JRValidationFault::getMessage).forEach(builder::addTextContent);
+					return builder.build();
+				}
+
+				JasperCompileManager.compileReport(jasperDesign);
 			}
-
-			JasperCompileManager.compileReport(jasperDesign);
 		} catch (Exception e) {
 //			log.warn("Validation failed for file: " + strPath, e);
 			return McpSchema.CallToolResult.builder().isError(true).addTextContent(e.getMessage()).build();
