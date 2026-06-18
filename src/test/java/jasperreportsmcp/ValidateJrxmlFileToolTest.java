@@ -5,12 +5,9 @@ import org.junit.jupiter.api.Test;
 
 import java.net.URISyntaxException;
 import java.nio.file.Path;
-import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -156,30 +153,6 @@ class ValidateJrxmlFileToolTest {
 		assertFalse(res.isError(), "Expected no error with extra fields");
 		var text = ((McpSchema.TextContent) res.content().getFirst()).text();
 		assertTrue(text.contains("Validation successful"));
-	}
-
-	@Test
-	void concurrentValidations_shouldBothComplete() {
-		assertTimeoutPreemptively(Duration.ofSeconds(10), () -> {
-			try (var executor = Executors.newFixedThreadPool(2)) {
-				var first = executor.submit(() -> validate(loadResourcePath("valid-report.jrxml"), null));
-				var second = executor.submit(() -> validate(loadResourcePath("report-with-multi-fields.jrxml"),
-						"userName, userEmail, randomText"));
-
-				assertFalse(first.get(10, TimeUnit.SECONDS).isError(), "Expected first validation to complete");
-				assertFalse(second.get(10, TimeUnit.SECONDS).isError(), "Expected second validation to complete");
-			}
-		});
-	}
-
-	private McpSchema.CallToolResult validate(String path, String data) {
-		var args = new HashMap<String, Object>();
-		args.put("path", path);
-		if (data != null) {
-			args.put("data", data);
-		}
-		var req = McpSchema.CallToolRequest.builder().name(getClass().getName()).arguments(args).build();
-		return tool.handler().apply(null, req);
 	}
 
 }

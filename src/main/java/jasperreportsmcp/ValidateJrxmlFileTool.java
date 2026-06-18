@@ -2,6 +2,7 @@ package jasperreportsmcp;
 
 import io.modelcontextprotocol.server.McpSyncServerExchange;
 import io.modelcontextprotocol.spec.McpSchema;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRValidationFault;
@@ -65,16 +66,7 @@ class ValidateJrxmlFileTool extends CustomMcpTool {
 		};
 	}
 
-	private boolean isValidFilePath(String strPath) {
-		try {
-			var path = Path.of(strPath);
-			return Files.isRegularFile(path);
-		} catch (Exception e) {
-			return false;
-		}
-	}
-
-	private McpSchema.CallToolResult validateJrxmlFile(String strPath, List<String> fieldNames) {
+	private static McpSchema.CallToolResult validateJrxmlFile(String strPath, List<String> fieldNames) {
 		if (!isValidFilePath(strPath)) {
 			return McpSchema.CallToolResult.builder()
 					.isError(true)
@@ -90,7 +82,7 @@ class ValidateJrxmlFileTool extends CustomMcpTool {
 		}
 
 		try {
-			synchronized (JASPER_REPORTS_VALIDATION_LOCK) {
+			synchronized (JASPER_REPORTS_VALIDATION_LOCK) { // todo: understand how to really test
 				var path = Path.of(strPath);
 				var jasperDesign = JRXmlLoader.load(path.toFile());
 
@@ -114,7 +106,16 @@ class ValidateJrxmlFileTool extends CustomMcpTool {
 				.build();
 	}
 
-	private void injectFields(JasperDesign design, List<String> fieldNames) throws Exception {
+	private static boolean isValidFilePath(String strPath) {
+		try {
+			var path = Path.of(strPath);
+			return Files.isRegularFile(path);
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	private static void injectFields(JasperDesign design, List<String> fieldNames) throws JRException {
 		for (String fieldName : fieldNames) {
 			if (design.getFieldsMap().containsKey(fieldName)) {
 				continue; // already declared in jrxml
